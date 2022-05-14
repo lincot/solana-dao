@@ -25,21 +25,22 @@ export async function initialize(ctx: Context): Promise<void> {
 
 export async function registerMentor(
   ctx: Context,
-  mentorAuthority: PublicKey,
+  mentorAuthority: Keypair,
   power: number | BN
 ): Promise<void> {
   await ctx.program.methods
-    .registerMentor(mentorAuthority, new BN(power))
+    .registerMentor(new BN(power))
     .accounts({
       dao: ctx.dao,
       daoAuthority: ctx.daoAuthority.publicKey,
       mntrMint: ctx.mntrMint,
-      mentor: await ctx.mentor(mentorAuthority),
-      mentorMntr: await ctx.mntrATA(await ctx.mentor(mentorAuthority)),
+      mentor: await ctx.mentor(mentorAuthority.publicKey),
+      mentorAuthority: mentorAuthority.publicKey,
+      mentorMntr: await ctx.mntrATA(await ctx.mentor(mentorAuthority.publicKey)),
       tokenProgram: TOKEN_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.daoAuthority])
+    .signers([ctx.daoAuthority, mentorAuthority])
     .rpc();
 }
 

@@ -30,7 +30,7 @@ describe("instructions", () => {
   });
 
   it("registerMentor", async () => {
-    await registerMentor(ctx, ctx.mentor1.publicKey, 5);
+    await registerMentor(ctx, ctx.mentor1, 5);
 
     expect(
       await (
@@ -43,8 +43,8 @@ describe("instructions", () => {
     );
     expect(mentor.bump).to.gt(200);
 
-    await registerMentor(ctx, ctx.mentor2.publicKey, 10);
-    await registerMentor(ctx, ctx.mentor3.publicKey, 100);
+    await registerMentor(ctx, ctx.mentor2, 10);
+    await registerMentor(ctx, ctx.mentor3, 100);
   });
 
   it("registerStudent", async () => {

@@ -3,22 +3,23 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
 #[derive(Accounts)]
-#[instruction(mentor_authority: Pubkey)]
 pub struct RegisterMentor<'info> {
     #[account(seeds = [b"dao"], bump = dao.bump)]
     dao: Account<'info, Dao>,
-    #[account(mut, address = dao.authority)]
+    #[account(address = dao.authority)]
     dao_authority: Signer<'info>,
     #[account(mut, seeds = [b"mntr_mint"], bump = dao.bump_mntr_mint)]
     mntr_mint: Account<'info, Mint>,
     #[account(
         init,
-        payer = dao_authority,
-        seeds = [b"mentor", mentor_authority.as_ref()],
+        payer = mentor_authority,
+        seeds = [b"mentor", mentor_authority.key().as_ref()],
         bump,
         space = 8 + Mentor::LEN,
     )]
     mentor: Account<'info, Mentor>,
+    #[account(mut)]
+    mentor_authority: Signer<'info>,
     #[account(mut, associated_token::authority = mentor, associated_token::mint = mntr_mint)]
     mentor_mntr: Account<'info, TokenAccount>,
     token_program: Program<'info, Token>,
@@ -39,11 +40,7 @@ fn mint_mntr(ctx: &Context<RegisterMentor>, amount: u64) -> Result<()> {
     token::mint_to(cpi_ctx, amount)
 }
 
-pub fn register_mentor(
-    ctx: Context<RegisterMentor>,
-    _mentor_authority: Pubkey,
-    power: u64,
-) -> Result<()> {
+pub fn register_mentor(ctx: Context<RegisterMentor>, power: u64) -> Result<()> {
     mint_mntr(&ctx, power)?;
 
     ctx.accounts.mentor.bump = *ctx.bumps.get("mentor").unwrap();

@@ -16,12 +16,8 @@ pub mod dao {
         instructions::initialize(ctx)
     }
 
-    pub fn register_mentor(
-        ctx: Context<RegisterMentor>,
-        mentor_authority: Pubkey,
-        power: u64,
-    ) -> Result<()> {
-        instructions::register_mentor(ctx, mentor_authority, power)
+    pub fn register_mentor(ctx: Context<RegisterMentor>, power: u64) -> Result<()> {
+        instructions::register_mentor(ctx, power)
     }
 
     pub fn register_student(

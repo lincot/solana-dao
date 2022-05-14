@@ -23,10 +23,10 @@ pub fn set_grade(ctx: Context<SetGrade>, _student_authority: Pubkey, new_grade: 
         return err!(DaoError::NotEnoughPower);
     }
 
-    let mentor = ctx.accounts.mentor_authority.key();
+    let mentor_key = ctx.accounts.mentor_authority.key();
     let mut grade = (ctx.accounts.student.current_grades)
         .iter_mut()
-        .find(|grade| grade.mentor == mentor)
+        .find(|grade| grade.mentor == mentor_key)
         .ok_or(DaoError::NotMentorOfStudent)?;
     grade.set_grade = Some(new_grade);
     grade.max_grade = ctx.accounts.mentor_mntr.amount;
