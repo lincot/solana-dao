@@ -36,7 +36,9 @@ export async function registerMentor(
       mntrMint: ctx.mntrMint,
       mentor: await ctx.mentor(mentorAuthority.publicKey),
       mentorAuthority: mentorAuthority.publicKey,
-      mentorMntr: await ctx.mntrATA(await ctx.mentor(mentorAuthority.publicKey)),
+      mentorMntr: await ctx.mntrATA(
+        await ctx.mentor(mentorAuthority.publicKey)
+      ),
       tokenProgram: TOKEN_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
     })
@@ -99,5 +101,23 @@ export async function endTask(
       studentAuthority,
     })
     .signers([ctx.daoAuthority])
+    .rpc();
+}
+
+export async function expelStudent(
+  ctx: Context,
+  mentorAuthority: Keypair,
+  studentAuthority: PublicKey
+): Promise<void> {
+  await ctx.program.methods
+    .expelStudent()
+    .accounts({
+      dao: ctx.dao,
+      daoAuthority: ctx.daoAuthority.publicKey,
+      mentorAuthority: mentorAuthority.publicKey,
+      student: await ctx.student(studentAuthority),
+      studentAuthority,
+    })
+    .signers([ctx.daoAuthority, mentorAuthority])
     .rpc();
 }

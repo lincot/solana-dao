@@ -9,6 +9,7 @@ import {
   initialize,
   setGrade,
   endTask,
+  expelStudent,
 } from "./api";
 
 chai.use(chaiAsPromised);
@@ -90,7 +91,7 @@ describe("instructions", () => {
     await setGrade(ctx, ctx.mentor1, ctx.student1.publicKey, 0);
     await setGrade(ctx, ctx.mentor1, ctx.student1.publicKey, 4);
 
-    let student = await ctx.program.account.student.fetch(
+    const student = await ctx.program.account.student.fetch(
       await ctx.student(ctx.student1.publicKey)
     );
     expect(
@@ -130,5 +131,13 @@ describe("instructions", () => {
     await setGrade(ctx, ctx.mentor2, ctx.student1.publicKey, 8);
 
     await endTask(ctx, ctx.student1.publicKey);
+  });
+
+  it("expelStudent", async () => {
+    await expect(
+      expelStudent(ctx, ctx.mentor3, ctx.student1.publicKey)
+    ).to.be.rejectedWith("NotMentorOfStudent");
+
+    await expelStudent(ctx, ctx.mentor1, ctx.student1.publicKey);
   });
 });

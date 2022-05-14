@@ -14,30 +14,6 @@ pub struct EndTask<'info> {
     student_authority: UncheckedAccount<'info>,
 }
 
-fn dismiss_student(ctx: &Context<EndTask>) -> Result<()> {
-    close(
-        ctx.accounts.student.to_account_info(),
-        ctx.accounts.student_authority.to_account_info(),
-    )?;
-    emit!(DismissStudentEvent {});
-    Ok(())
-}
-
-#[event]
-struct DismissStudentEvent {}
-
-fn graduate_student(ctx: &Context<EndTask>) -> Result<()> {
-    close(
-        ctx.accounts.student.to_account_info(),
-        ctx.accounts.student_authority.to_account_info(),
-    )?;
-    emit!(GraduateStudentEvent {});
-    Ok(())
-}
-
-#[event]
-struct GraduateStudentEvent {}
-
 pub fn end_task(ctx: Context<EndTask>) -> Result<()> {
     let now = Clock::get()?.unix_timestamp as u32;
 
@@ -69,3 +45,31 @@ pub fn end_task(ctx: Context<EndTask>) -> Result<()> {
 
 #[event]
 struct EndTaskEvent {}
+
+fn dismiss_student(ctx: &Context<EndTask>) -> Result<()> {
+    close(
+        ctx.accounts.student.to_account_info(),
+        ctx.accounts.student_authority.to_account_info(),
+    )?;
+
+    emit!(DismissStudentEvent {});
+
+    Ok(())
+}
+
+#[event]
+struct DismissStudentEvent {}
+
+fn graduate_student(ctx: &Context<EndTask>) -> Result<()> {
+    close(
+        ctx.accounts.student.to_account_info(),
+        ctx.accounts.student_authority.to_account_info(),
+    )?;
+
+    emit!(GraduateStudentEvent {});
+
+    Ok(())
+}
+
+#[event]
+struct GraduateStudentEvent {}

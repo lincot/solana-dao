@@ -36,4 +36,8 @@ pub mod dao {
     pub fn end_task(ctx: Context<EndTask>) -> Result<()> {
         instructions::end_task(ctx)
     }
+
+    pub fn expel_student(ctx: Context<ExpelStudent>) -> Result<()> {
+        instructions::expel_student(ctx)
+    }
 }
