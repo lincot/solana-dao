@@ -54,12 +54,12 @@ pub fn end_task(ctx: Context<EndTask>) -> Result<()> {
     }
 
     if set_grades_sum < max_grades_sum * 2 / 3 {
-        return dismiss_student(&ctx);
-    }
-
-    ctx.accounts.student.completed_tasks += 1;
-    if ctx.accounts.student.completed_tasks == ctx.accounts.student.total_tasks {
-        return graduate_student(&ctx);
+        dismiss_student(&ctx)?;
+    } else {
+        ctx.accounts.student.completed_tasks += 1;
+        if ctx.accounts.student.completed_tasks == ctx.accounts.student.total_tasks {
+            graduate_student(&ctx)?;
+        }
     }
 
     emit!(EndTaskEvent {});
