@@ -16,7 +16,7 @@ pub struct SetGrade<'info> {
 
 pub fn set_grade(ctx: Context<SetGrade>, _student_authority: Pubkey, new_grade: u64) -> Result<()> {
     if new_grade > ctx.accounts.mentor_mntr.amount {
-        return err!(AcademyError::NotEnoughPower);
+        return err!(AcademyError::NotEnoughMNTR);
     }
 
     let mentor_key = ctx.accounts.mentor.key();

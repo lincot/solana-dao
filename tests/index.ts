@@ -63,7 +63,7 @@ describe("instructions", () => {
   it("setGrade", async () => {
     await expect(
       setGrade(ctx, ctx.mentor1, ctx.student1.publicKey, 6)
-    ).to.be.rejectedWith("NotEnoughPower");
+    ).to.be.rejectedWith("NotEnoughMNTR");
 
     await expect(
       setGrade(ctx, ctx.mentor3, ctx.student1.publicKey, 5)

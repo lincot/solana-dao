@@ -12,8 +12,8 @@ pub enum AcademyError {
     #[msg("Mentor is not assigned to user")]
     NotMentorOfStudent,
     /// 6003 0x1773
-    #[msg("Grade cannot be higher than mentor's power")]
-    NotEnoughPower,
+    #[msg("Grade cannot be higher than mentor's MNTR amount")]
+    NotEnoughMNTR,
     /// 6004 0x1774
     #[msg("Task duration has not yet elapsed")]
     TaskTimelock,
