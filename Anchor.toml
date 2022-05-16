@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.localnet]
-dao = "DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq"
+academy = "DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq"
 
 [registry]
 url = "https://anchor.projectserum.com"

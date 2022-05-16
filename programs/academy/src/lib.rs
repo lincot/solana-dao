@@ -9,7 +9,7 @@ pub mod utils;
 declare_id!("DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq");
 
 #[program]
-pub mod dao {
+pub mod academy {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>, mntr_mint: Pubkey) -> Result<()> {

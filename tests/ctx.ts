@@ -1,20 +1,20 @@
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
-import { Dao } from "../target/types/dao";
+import { Academy } from "../target/types/academy";
 import { createMint, findATA, mintTo, TokenAccount } from "./token";
 import { airdrop, findPDA } from "./utils";
 
 export class Context {
   connection: Connection;
-  program: Program<Dao>;
+  academyProgram: Program<Academy>;
   payer: Keypair;
 
   mntrMint: PublicKey;
   mntrMintAuthority: Keypair;
 
-  dao: PublicKey;
-  daoAuthority: Keypair;
+  academy: PublicKey;
+  academyAuthority: Keypair;
 
   mentor1: Keypair;
   mentor2: Keypair;
@@ -25,11 +25,11 @@ export class Context {
 
   constructor() {
     this.connection = new Connection("http://localhost:8899", "recent");
-    this.program = anchor.workspace.Dao;
+    this.academyProgram = anchor.workspace.Academy;
     this.payer = new Keypair();
 
     this.mntrMintAuthority = new Keypair();
-    this.daoAuthority = new Keypair();
+    this.academyAuthority = new Keypair();
     this.mentor1 = new Keypair();
     this.mentor2 = new Keypair();
     this.mentor3 = new Keypair();
@@ -40,7 +40,7 @@ export class Context {
   async setup() {
     await airdrop(this, [
       this.mntrMintAuthority.publicKey,
-      this.daoAuthority.publicKey,
+      this.academyAuthority.publicKey,
       this.mentor1.publicKey,
       this.mentor2.publicKey,
       this.mentor3.publicKey,
@@ -48,7 +48,10 @@ export class Context {
       this.student2.publicKey,
     ]);
 
-    this.dao = await findPDA(this, [Buffer.from("dao")]);
+    this.academy = await findPDA(
+      [Buffer.from("academy")],
+      this.academyProgram.programId
+    );
     this.mntrMint = await createMint(this, this.mntrMintAuthority, 3);
 
     await mintTo(
@@ -72,10 +75,10 @@ export class Context {
   }
 
   async student(studentAuthority: PublicKey): Promise<PublicKey> {
-    return await findPDA(this, [
-      Buffer.from("student"),
-      studentAuthority.toBuffer(),
-    ]);
+    return await findPDA(
+      [Buffer.from("student"), studentAuthority.toBuffer()],
+      this.academyProgram.programId
+    );
   }
 
   async mntrATA(owner: PublicKey): Promise<TokenAccount> {

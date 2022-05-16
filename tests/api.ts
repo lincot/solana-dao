@@ -3,14 +3,14 @@ import { Keypair, SystemProgram, PublicKey } from "@solana/web3.js";
 import { Context } from "./ctx";
 
 export async function initialize(ctx: Context): Promise<void> {
-  await ctx.program.methods
+  await ctx.academyProgram.methods
     .initialize(ctx.mntrMint)
     .accounts({
-      dao: ctx.dao,
-      daoAuthority: ctx.daoAuthority.publicKey,
+      academy: ctx.academy,
+      academyAuthority: ctx.academyAuthority.publicKey,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.daoAuthority])
+    .signers([ctx.academyAuthority])
     .rpc();
 }
 
@@ -21,16 +21,16 @@ export async function registerStudent(
   totalTasks: number,
   taskDuration: number
 ): Promise<void> {
-  await ctx.program.methods
+  await ctx.academyProgram.methods
     .registerStudent(mentors, totalTasks, taskDuration)
     .accounts({
-      dao: ctx.dao,
-      daoAuthority: ctx.daoAuthority.publicKey,
+      academy: ctx.academy,
+      academyAuthority: ctx.academyAuthority.publicKey,
       student: await ctx.student(studentAuthority.publicKey),
       studentAuthority: studentAuthority.publicKey,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.daoAuthority, studentAuthority])
+    .signers([ctx.academyAuthority, studentAuthority])
     .rpc();
 }
 
@@ -40,10 +40,10 @@ export async function setGrade(
   studentAuthority: PublicKey,
   grade: number | BN
 ): Promise<void> {
-  await ctx.program.methods
+  await ctx.academyProgram.methods
     .setGrade(studentAuthority, new BN(grade))
     .accounts({
-      dao: ctx.dao,
+      academy: ctx.academy,
       mentor: mentor.publicKey,
       mentorMntr: await ctx.mntrATA(mentor.publicKey),
       student: await ctx.student(studentAuthority),
@@ -56,15 +56,15 @@ export async function endTask(
   ctx: Context,
   studentAuthority: PublicKey
 ): Promise<void> {
-  await ctx.program.methods
+  await ctx.academyProgram.methods
     .endTask()
     .accounts({
-      dao: ctx.dao,
-      daoAuthority: ctx.daoAuthority.publicKey,
+      academy: ctx.academy,
+      academyAuthority: ctx.academyAuthority.publicKey,
       student: await ctx.student(studentAuthority),
       studentAuthority,
     })
-    .signers([ctx.daoAuthority])
+    .signers([ctx.academyAuthority])
     .rpc();
 }
 
@@ -73,15 +73,15 @@ export async function expelStudent(
   mentor: Keypair,
   studentAuthority: PublicKey
 ): Promise<void> {
-  await ctx.program.methods
+  await ctx.academyProgram.methods
     .expelStudent()
     .accounts({
-      dao: ctx.dao,
-      daoAuthority: ctx.daoAuthority.publicKey,
+      academy: ctx.academy,
+      academyAuthority: ctx.academyAuthority.publicKey,
       mentor: mentor.publicKey,
       student: await ctx.student(studentAuthority),
       studentAuthority,
     })
-    .signers([ctx.daoAuthority, mentor])
+    .signers([ctx.academyAuthority, mentor])
     .rpc();
 }

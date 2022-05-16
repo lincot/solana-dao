@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub enum DaoError {
+pub enum AcademyError {
     /// 6000 0x1770
     #[msg("Overflow")]
     Overflow,

@@ -23,10 +23,10 @@ describe("instructions", () => {
   it("initialize", async () => {
     await initialize(ctx);
 
-    const dao = await ctx.program.account.dao.fetch(ctx.dao);
-    expect(dao.bump).to.gt(200);
-    expect(dao.mntrMint).to.eql(ctx.mntrMint);
-    expect(dao.authority).to.eql(ctx.daoAuthority.publicKey);
+    const academy = await ctx.academyProgram.account.academy.fetch(ctx.academy);
+    expect(academy.bump).to.gt(200);
+    expect(academy.mntrMint).to.eql(ctx.mntrMint);
+    expect(academy.authority).to.eql(ctx.academyAuthority.publicKey);
   });
 
   it("registerStudent", async () => {
@@ -40,7 +40,7 @@ describe("instructions", () => {
 
     await registerStudent(ctx, ctx.student1, mentors, totalTasks, taskDuration);
 
-    const student = await ctx.program.account.student.fetch(
+    const student = await ctx.academyProgram.account.student.fetch(
       await ctx.student(ctx.student1.publicKey)
     );
     expect(student.bump).to.gt(200);
@@ -72,7 +72,7 @@ describe("instructions", () => {
     await setGrade(ctx, ctx.mentor1, ctx.student1.publicKey, 0);
     await setGrade(ctx, ctx.mentor1, ctx.student1.publicKey, 4);
 
-    const student = await ctx.program.account.student.fetch(
+    const student = await ctx.academyProgram.account.student.fetch(
       await ctx.student(ctx.student1.publicKey)
     );
     expect(

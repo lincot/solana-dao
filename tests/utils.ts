@@ -33,10 +33,10 @@ export async function airdrop(
 }
 
 export async function findPDA(
-  ctx: Context,
-  seeds: (Buffer | Uint8Array)[]
+  seeds: (Buffer | Uint8Array)[],
+  programId: PublicKey
 ): Promise<PublicKey> {
-  return (await PublicKey.findProgramAddress(seeds, ctx.program.programId))[0];
+  return (await PublicKey.findProgramAddress(seeds, programId))[0];
 }
 
 export function sleep(ms: number) {

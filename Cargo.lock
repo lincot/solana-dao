@@ -3,6 +3,14 @@
 version = 3
 
 [[package]]
+name = "academy"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+]
+
+[[package]]
 name = "ahash"
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -479,14 +487,6 @@ dependencies = [
  "rand_core",
  "subtle",
  "zeroize",
-]
-
-[[package]]
-name = "dao"
-version = "0.1.0"
-dependencies = [
- "anchor-lang",
- "anchor-spl",
 ]
 
 [[package]]

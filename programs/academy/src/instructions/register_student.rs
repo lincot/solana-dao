@@ -4,10 +4,10 @@ use anchor_lang::prelude::*;
 #[derive(Accounts)]
 #[instruction(mentors: Vec<Pubkey>)]
 pub struct RegisterStudent<'info> {
-    #[account(seeds = [b"dao"], bump = dao.bump)]
-    dao: Account<'info, Dao>,
-    #[account(address = dao.authority)]
-    dao_authority: Signer<'info>,
+    #[account(seeds = [b"academy"], bump = academy.bump)]
+    academy: Account<'info, Academy>,
+    #[account(address = academy.authority)]
+    academy_authority: Signer<'info>,
     #[account(
         init,
         payer = student_authority,
@@ -30,7 +30,7 @@ pub fn register_student(
     let now = Clock::get()?.unix_timestamp as u32;
 
     if total_tasks == 0 {
-        return err!(DaoError::Zero);
+        return err!(AcademyError::Zero);
     }
 
     ctx.accounts.student.bump = *ctx.bumps.get("student").unwrap();

@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
 #[account]
-pub struct Dao {
+pub struct Academy {
     pub bump: u8,
     pub authority: Pubkey,
     pub mntr_mint: Pubkey,
 }
-impl Dao {
+impl Academy {
     pub const LEN: usize = 1 + 32 + 32;
 }
 
