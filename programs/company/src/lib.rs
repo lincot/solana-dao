@@ -16,7 +16,7 @@ pub mod company {
         instructions::initialize(ctx)
     }
 
-    pub fn employ(ctx: Context<Employ>, employee_authority: Pubkey, salary: u64) -> Result<()> {
-        instructions::employ(ctx, employee_authority, salary)
+    pub fn employ(ctx: Context<Employ>, salary: u64) -> Result<()> {
+        instructions::employ(ctx, salary)
     }
 }

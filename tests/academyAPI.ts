@@ -54,17 +54,23 @@ export async function setGrade(
 
 export async function endTask(
   ctx: Context,
-  studentAuthority: PublicKey
+  studentAuthority: Keypair
 ): Promise<void> {
   await ctx.academyProgram.methods
     .endTask()
     .accounts({
       academy: ctx.academy,
       academyAuthority: ctx.companyAuthority.publicKey,
-      student: await ctx.student(studentAuthority),
-      studentAuthority,
+      student: await ctx.student(studentAuthority.publicKey),
+      studentAuthority: studentAuthority.publicKey,
+
+      company: ctx.company,
+      employee: await ctx.employee(studentAuthority.publicKey),
+      companyProgram: ctx.companyProgram.programId,
+
+      systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.companyAuthority])
+    .signers([ctx.companyAuthority, studentAuthority])
     .rpc();
 }
 

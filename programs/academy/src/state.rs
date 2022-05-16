@@ -36,7 +36,9 @@ pub struct Student {
     pub task_duration: u32,
     pub current_task_start_ts: u32,
     pub current_grades: Vec<Grade>,
+    pub set_grades_sum: u64,
+    pub max_grades_sum: u64,
 }
 impl Student {
-    pub const LEN: usize = 1 + 1 + 1 + 4 + 4 + 4;
+    pub const LEN: usize = 1 + 1 + 1 + 4 + 4 + 4 + 8 + 8;
 }

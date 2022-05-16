@@ -32,7 +32,7 @@ describe("company", () => {
   it("employ", async () => {
     const salary = 10000;
 
-    await employ(ctx, ctx.mentor3.publicKey, salary);
+    await employ(ctx, ctx.mentor3, salary);
 
     const employee = await ctx.companyProgram.account.employee.fetch(
       await ctx.employee(ctx.mentor3.publicKey)
@@ -122,19 +122,17 @@ describe("academy", () => {
   });
 
   it("endTask", async () => {
-    await expect(endTask(ctx, ctx.student1.publicKey)).to.be.rejectedWith(
-      "TaskTimelock"
-    );
+    await expect(endTask(ctx, ctx.student1)).to.be.rejectedWith("TaskTimelock");
 
     await sleep(10000);
 
-    await expect(endTask(ctx, ctx.student1.publicKey)).to.be.rejectedWith(
+    await expect(endTask(ctx, ctx.student1)).to.be.rejectedWith(
       "NotAllMentorsHaveVoted"
     );
 
     await setGrade(ctx, ctx.mentor2, ctx.student1.publicKey, 8);
 
-    await endTask(ctx, ctx.student1.publicKey);
+    await endTask(ctx, ctx.student1);
   });
 
   it("expelStudent", async () => {

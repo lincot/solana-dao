@@ -1,5 +1,5 @@
 import { BN } from "@project-serum/anchor";
-import { SystemProgram, PublicKey } from "@solana/web3.js";
+import { SystemProgram, Keypair } from "@solana/web3.js";
 import { Context } from "./ctx";
 
 export async function initializeCompany(ctx: Context): Promise<void> {
@@ -16,17 +16,18 @@ export async function initializeCompany(ctx: Context): Promise<void> {
 
 export async function employ(
   ctx: Context,
-  employeeAuthority: PublicKey,
+  employeeAuthority: Keypair,
   salary: number | BN
 ): Promise<void> {
   await ctx.companyProgram.methods
-    .employ(employeeAuthority, new BN(salary))
+    .employ(new BN(salary))
     .accounts({
       company: ctx.company,
       companyAuthority: ctx.companyAuthority.publicKey,
-      employee: await ctx.employee(employeeAuthority),
+      employee: await ctx.employee(employeeAuthority.publicKey),
+      employeeAuthority: employeeAuthority.publicKey,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.companyAuthority])
+    .signers([ctx.companyAuthority, employeeAuthority])
     .rpc();
 }
