@@ -10,7 +10,7 @@ import {
   endTask,
   expelStudent,
 } from "./academyAPI";
-import { initializeCompany } from "./companyAPI";
+import { employ, initializeCompany } from "./companyAPI";
 
 chai.use(chaiAsPromised);
 
@@ -23,6 +23,22 @@ before(async () => {
 describe("company", () => {
   it("initialize", async () => {
     await initializeCompany(ctx);
+
+    const company = await ctx.companyProgram.account.company.fetch(ctx.company);
+    expect(company.bump).to.gt(200);
+    expect(company.authority).to.eql(ctx.companyAuthority.publicKey);
+  });
+
+  it("employ", async () => {
+    const salary = 10000;
+
+    await employ(ctx, ctx.mentor3.publicKey, salary);
+
+    const employee = await ctx.companyProgram.account.employee.fetch(
+      await ctx.employee(ctx.mentor3.publicKey)
+    );
+    expect(employee.bump).to.gt(200);
+    expect(employee.salary.toNumber()).to.eql(salary);
   });
 });
 
@@ -33,7 +49,7 @@ describe("academy", () => {
     const academy = await ctx.academyProgram.account.academy.fetch(ctx.academy);
     expect(academy.bump).to.gt(200);
     expect(academy.mntrMint).to.eql(ctx.mntrMint);
-    expect(academy.authority).to.eql(ctx.academyAuthority.publicKey);
+    expect(academy.authority).to.eql(ctx.companyAuthority.publicKey);
   });
 
   it("registerStudent", async () => {

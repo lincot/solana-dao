@@ -18,7 +18,6 @@ export class Context {
   mntrMintAuthority: Keypair;
 
   academy: PublicKey;
-  academyAuthority: Keypair;
 
   company: PublicKey;
   companyAuthority: Keypair;
@@ -37,7 +36,6 @@ export class Context {
     this.payer = new Keypair();
 
     this.mntrMintAuthority = new Keypair();
-    this.academyAuthority = new Keypair();
     this.companyAuthority = new Keypair();
     this.mentor1 = new Keypair();
     this.mentor2 = new Keypair();
@@ -49,7 +47,6 @@ export class Context {
   async setup() {
     await airdrop(this, [
       this.mntrMintAuthority.publicKey,
-      this.academyAuthority.publicKey,
       this.companyAuthority.publicKey,
       this.mentor1.publicKey,
       this.mentor2.publicKey,
@@ -93,6 +90,13 @@ export class Context {
     return await findPDA(
       [Buffer.from("student"), studentAuthority.toBuffer()],
       this.academyProgram.programId
+    );
+  }
+
+  async employee(employeeAuthority: PublicKey): Promise<PublicKey> {
+    return await findPDA(
+      [Buffer.from("employee"), employeeAuthority.toBuffer()],
+      this.companyProgram.programId
     );
   }
 

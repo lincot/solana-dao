@@ -7,10 +7,10 @@ export async function initializeAcademy(ctx: Context): Promise<void> {
     .initialize(ctx.mntrMint)
     .accounts({
       academy: ctx.academy,
-      academyAuthority: ctx.academyAuthority.publicKey,
+      academyAuthority: ctx.companyAuthority.publicKey,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.academyAuthority])
+    .signers([ctx.companyAuthority])
     .rpc();
 }
 
@@ -25,12 +25,12 @@ export async function registerStudent(
     .registerStudent(mentors, totalTasks, taskDuration)
     .accounts({
       academy: ctx.academy,
-      academyAuthority: ctx.academyAuthority.publicKey,
+      academyAuthority: ctx.companyAuthority.publicKey,
       student: await ctx.student(studentAuthority.publicKey),
       studentAuthority: studentAuthority.publicKey,
       systemProgram: SystemProgram.programId,
     })
-    .signers([ctx.academyAuthority, studentAuthority])
+    .signers([ctx.companyAuthority, studentAuthority])
     .rpc();
 }
 
@@ -60,11 +60,11 @@ export async function endTask(
     .endTask()
     .accounts({
       academy: ctx.academy,
-      academyAuthority: ctx.academyAuthority.publicKey,
+      academyAuthority: ctx.companyAuthority.publicKey,
       student: await ctx.student(studentAuthority),
       studentAuthority,
     })
-    .signers([ctx.academyAuthority])
+    .signers([ctx.companyAuthority])
     .rpc();
 }
 
@@ -77,11 +77,11 @@ export async function expelStudent(
     .expelStudent()
     .accounts({
       academy: ctx.academy,
-      academyAuthority: ctx.academyAuthority.publicKey,
+      academyAuthority: ctx.companyAuthority.publicKey,
       mentor: mentor.publicKey,
       student: await ctx.student(studentAuthority),
       studentAuthority,
     })
-    .signers([ctx.academyAuthority, mentor])
+    .signers([ctx.companyAuthority, mentor])
     .rpc();
 }
