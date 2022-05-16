@@ -4,7 +4,6 @@ import chaiAsPromised from "chai-as-promised";
 import { sleep } from "./utils";
 import { Context } from "./ctx";
 import {
-  registerMentor,
   registerStudent,
   initialize,
   setGrade,
@@ -26,26 +25,8 @@ describe("instructions", () => {
 
     const dao = await ctx.program.account.dao.fetch(ctx.dao);
     expect(dao.bump).to.gt(200);
-    expect(dao.bumpMntrMint).to.gt(200);
+    expect(dao.mntrMint).to.eql(ctx.mntrMint);
     expect(dao.authority).to.eql(ctx.daoAuthority.publicKey);
-  });
-
-  it("registerMentor", async () => {
-    await registerMentor(ctx, ctx.mentor1, 5);
-
-    expect(
-      await (
-        await ctx.mntrATA(await ctx.mentor(ctx.mentor1.publicKey))
-      ).amount(ctx)
-    ).to.eql(5);
-
-    const mentor = await ctx.program.account.mentor.fetch(
-      await ctx.mentor(ctx.mentor1.publicKey)
-    );
-    expect(mentor.bump).to.gt(200);
-
-    await registerMentor(ctx, ctx.mentor2, 10);
-    await registerMentor(ctx, ctx.mentor3, 100);
   });
 
   it("registerStudent", async () => {

@@ -12,12 +12,8 @@ declare_id!("DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq");
 pub mod dao {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        instructions::initialize(ctx)
-    }
-
-    pub fn register_mentor(ctx: Context<RegisterMentor>, power: u64) -> Result<()> {
-        instructions::register_mentor(ctx, power)
+    pub fn initialize(ctx: Context<Initialize>, mntr_mint: Pubkey) -> Result<()> {
+        instructions::initialize(ctx, mntr_mint)
     }
 
     pub fn register_student(

@@ -2,7 +2,7 @@ import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { Dao } from "../target/types/dao";
-import { findATA, TokenAccount } from "./token";
+import { createMint, findATA, mintTo, TokenAccount } from "./token";
 import { airdrop, findPDA } from "./utils";
 
 export class Context {
@@ -10,9 +10,11 @@ export class Context {
   program: Program<Dao>;
   payer: Keypair;
 
-  daoAuthority: Keypair;
-  dao: PublicKey;
   mntrMint: PublicKey;
+  mntrMintAuthority: Keypair;
+
+  dao: PublicKey;
+  daoAuthority: Keypair;
 
   mentor1: Keypair;
   mentor2: Keypair;
@@ -26,6 +28,7 @@ export class Context {
     this.program = anchor.workspace.Dao;
     this.payer = new Keypair();
 
+    this.mntrMintAuthority = new Keypair();
     this.daoAuthority = new Keypair();
     this.mentor1 = new Keypair();
     this.mentor2 = new Keypair();
@@ -36,6 +39,7 @@ export class Context {
 
   async setup() {
     await airdrop(this, [
+      this.mntrMintAuthority.publicKey,
       this.daoAuthority.publicKey,
       this.mentor1.publicKey,
       this.mentor2.publicKey,
@@ -45,14 +49,26 @@ export class Context {
     ]);
 
     this.dao = await findPDA(this, [Buffer.from("dao")]);
-    this.mntrMint = await findPDA(this, [Buffer.from("mntr_mint")]);
-  }
+    this.mntrMint = await createMint(this, this.mntrMintAuthority, 3);
 
-  async mentor(mentorAuthority: PublicKey): Promise<PublicKey> {
-    return await findPDA(this, [
-      Buffer.from("mentor"),
-      mentorAuthority.toBuffer(),
-    ]);
+    await mintTo(
+      this,
+      await this.mntrATA(this.mentor1.publicKey),
+      this.mntrMintAuthority,
+      5
+    );
+    await mintTo(
+      this,
+      await this.mntrATA(this.mentor2.publicKey),
+      this.mntrMintAuthority,
+      10
+    );
+    await mintTo(
+      this,
+      await this.mntrATA(this.mentor3.publicKey),
+      this.mntrMintAuthority,
+      100
+    );
   }
 
   async student(studentAuthority: PublicKey): Promise<PublicKey> {

@@ -1,6 +1,5 @@
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint, Token};
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
@@ -8,23 +7,12 @@ pub struct Initialize<'info> {
     dao: Account<'info, Dao>,
     #[account(mut)]
     dao_authority: Signer<'info>,
-    #[account(
-        init,
-        payer = dao_authority,
-        seeds = [b"mntr_mint"],
-        bump,
-        mint::authority = dao,
-        mint::decimals = 6,
-    )]
-    mntr_mint: Account<'info, Mint>,
-    rent: Sysvar<'info, Rent>,
-    token_program: Program<'info, Token>,
     system_program: Program<'info, System>,
 }
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+pub fn initialize(ctx: Context<Initialize>, mntr_mint: Pubkey) -> Result<()> {
     ctx.accounts.dao.bump = *ctx.bumps.get("dao").unwrap();
-    ctx.accounts.dao.bump_mntr_mint = *ctx.bumps.get("mntr_mint").unwrap();
+    ctx.accounts.dao.mntr_mint = mntr_mint;
     ctx.accounts.dao.authority = ctx.accounts.dao_authority.key();
 
     emit!(InitializeEvent {});

@@ -3,11 +3,11 @@ use anchor_lang::prelude::*;
 #[account]
 pub struct Dao {
     pub bump: u8,
-    pub bump_mntr_mint: u8,
     pub authority: Pubkey,
+    pub mntr_mint: Pubkey,
 }
 impl Dao {
-    pub const LEN: usize = 1 + 1 + 32;
+    pub const LEN: usize = 1 + 32 + 32;
 }
 
 #[account]

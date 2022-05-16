@@ -7,7 +7,7 @@ pub struct ExpelStudent<'info> {
     dao: Account<'info, Dao>,
     #[account(address = dao.authority)]
     dao_authority: Signer<'info>,
-    mentor_authority: Signer<'info>,
+    mentor: Signer<'info>,
     #[account(mut, seeds = [b"student", student_authority.key().as_ref()], bump = student.bump)]
     student: Account<'info, Student>,
     /// CHECK:
@@ -16,7 +16,7 @@ pub struct ExpelStudent<'info> {
 }
 
 pub fn expel_student(ctx: Context<ExpelStudent>) -> Result<()> {
-    let mentor_key = ctx.accounts.mentor_authority.key();
+    let mentor_key = ctx.accounts.mentor.key();
     (ctx.accounts.student.current_grades)
         .iter()
         .find(|grade| grade.mentor == mentor_key)
