@@ -2,7 +2,7 @@ import { BN } from "@project-serum/anchor";
 import { Keypair, SystemProgram, PublicKey } from "@solana/web3.js";
 import { Context } from "./ctx";
 
-export async function initialize(ctx: Context): Promise<void> {
+export async function initializeAcademy(ctx: Context): Promise<void> {
   await ctx.academyProgram.methods
     .initialize(ctx.mntrMint)
     .accounts({

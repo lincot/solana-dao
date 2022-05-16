@@ -5,11 +5,12 @@ import { sleep } from "./utils";
 import { Context } from "./ctx";
 import {
   registerStudent,
-  initialize,
+  initializeAcademy,
   setGrade,
   endTask,
   expelStudent,
-} from "./api";
+} from "./academyAPI";
+import { initializeCompany } from "./companyAPI";
 
 chai.use(chaiAsPromised);
 
@@ -19,9 +20,15 @@ before(async () => {
   await ctx.setup();
 });
 
-describe("instructions", () => {
+describe("company", () => {
   it("initialize", async () => {
-    await initialize(ctx);
+    await initializeCompany(ctx);
+  });
+});
+
+describe("academy", () => {
+  it("initialize", async () => {
+    await initializeAcademy(ctx);
 
     const academy = await ctx.academyProgram.account.academy.fetch(ctx.academy);
     expect(academy.bump).to.gt(200);

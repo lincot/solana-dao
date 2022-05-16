@@ -1,7 +1,8 @@
 [features]
 seeds = false
 [programs.localnet]
-academy = "DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq"
+academy = "6hkoUJeFTLQuB4Xt7G8VAW5vsHo9nvvU2Pz4QWPtBw8k"
+company = "A46Aij7LFNy5JW1EtDbQpCtHbw3EB1CWFvirnQMJ2Fdk"
 
 [registry]
 url = "https://anchor.projectserum.com"

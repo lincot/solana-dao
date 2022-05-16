@@ -6,7 +6,7 @@ pub mod instructions;
 pub mod state;
 pub mod utils;
 
-declare_id!("DQb5ikQX5msGg7Px7YbdwEsyLapcnrNe9JTM3M9TC5Jq");
+declare_id!("6hkoUJeFTLQuB4Xt7G8VAW5vsHo9nvvU2Pz4QWPtBw8k");
 
 #[program]
 pub mod academy {

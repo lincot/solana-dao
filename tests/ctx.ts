@@ -2,12 +2,16 @@ import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { Academy } from "../target/types/academy";
+import { Company } from "../target/types/company";
 import { createMint, findATA, mintTo, TokenAccount } from "./token";
 import { airdrop, findPDA } from "./utils";
 
 export class Context {
   connection: Connection;
+
   academyProgram: Program<Academy>;
+  companyProgram: Program<Company>;
+
   payer: Keypair;
 
   mntrMint: PublicKey;
@@ -15,6 +19,9 @@ export class Context {
 
   academy: PublicKey;
   academyAuthority: Keypair;
+
+  company: PublicKey;
+  companyAuthority: Keypair;
 
   mentor1: Keypair;
   mentor2: Keypair;
@@ -26,10 +33,12 @@ export class Context {
   constructor() {
     this.connection = new Connection("http://localhost:8899", "recent");
     this.academyProgram = anchor.workspace.Academy;
+    this.companyProgram = anchor.workspace.Company;
     this.payer = new Keypair();
 
     this.mntrMintAuthority = new Keypair();
     this.academyAuthority = new Keypair();
+    this.companyAuthority = new Keypair();
     this.mentor1 = new Keypair();
     this.mentor2 = new Keypair();
     this.mentor3 = new Keypair();
@@ -41,6 +50,7 @@ export class Context {
     await airdrop(this, [
       this.mntrMintAuthority.publicKey,
       this.academyAuthority.publicKey,
+      this.companyAuthority.publicKey,
       this.mentor1.publicKey,
       this.mentor2.publicKey,
       this.mentor3.publicKey,
@@ -53,6 +63,11 @@ export class Context {
       this.academyProgram.programId
     );
     this.mntrMint = await createMint(this, this.mntrMintAuthority, 3);
+
+    this.company = await findPDA(
+      [Buffer.from("company")],
+      this.companyProgram.programId
+    );
 
     await mintTo(
       this,
